@@ -10,8 +10,8 @@ Parameters:
   Subnets:
     Type: List<AWS::EC2::Subnet::Id>
 
-  SourceSecurityGroup:
-    Type: AWS::EC2::SecurityGroup::Id
+  CIDR:
+    Type: String
 
   VpcId:
     Type: AWS::EC2::VPC::Id
@@ -71,7 +71,7 @@ Resources:
     Properties:
       GroupDescription: !Sub ${AWS::StackName}-hosts
       SecurityGroupIngress:
-        - SourceSecurityGroupId: !Ref SourceSecurityGroup
+        - CidrIp: !Ref CIDR
           IpProtocol: -1
       VpcId: !Ref VpcId
 
