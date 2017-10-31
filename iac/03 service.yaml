@@ -16,6 +16,8 @@ Parameters:
   LoadBalancer:
     Type: String
 
+  ContainerPort:
+    Type: String
 
 Resources:
   ECSServiceRole:
@@ -43,7 +45,7 @@ Resources:
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
         - ContainerName: !Ref AWS::StackName
-          ContainerPort: 80
+          ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref TargetGroup
 
   TaskDefinition:
@@ -56,7 +58,7 @@ Resources:
           Essential: true
           Memory: 128
           PortMappings:
-            - ContainerPort: 80
+            - ContainerPort: !Ref ContainerPort
           Environment:
             - Name: Tag
               Value: !Ref Tag
@@ -65,7 +67,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       LoadBalancerArn: !Ref LoadBalancer
-      Port: 8080
+      Port: !Ref ContainerPort
       Protocol: HTTP
       DefaultActions:
         - Type: forward
@@ -76,7 +78,7 @@ Resources:
     Properties:
       Name: !Ref AWS::StackName
       VpcId: !Ref VpcId
-      Port: 80
+      Port: !Ref ContainerPort
       Protocol: HTTP
       Matcher:
         HttpCode: 200-299
