@@ -1,7 +1,7 @@
 FROM gradle:4.2.1-jdk8-alpine AS build-env
 WORKDIR /home/gradle
 ADD . /home/gradle
-RUN gradle build
+RUN gradle build --stacktrace
 
 FROM openjdk:8-jre-alpine
 COPY --from=build-env /home/gradle/build/libs/gradle.jar /app/app.jar
