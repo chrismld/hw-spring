@@ -24,6 +24,9 @@ Parameters:
     
   SecurityGroupALB:
     Type: String
+  
+  ActorsEndpoint:
+    Type: String
 
 Resources:
   SecurityGroupIngress:
@@ -77,6 +80,8 @@ Resources:
           Environment:
             - Name: Tag
               Value: !Ref Tag
+            - Name: ACTORS_ENDPOINT
+              Value: !Ref ActorsEndpoint
               
   LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
