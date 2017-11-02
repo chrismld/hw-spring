@@ -21,8 +21,20 @@ Parameters:
 
   ExposedPort:
     Type: Number
+    
+  SecurityGroupALB:
+    Type: String
 
 Resources:
+  SecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+        CidrIp: "0.0.0.0/0"
+        IpProtocol: "TCP"
+        FromPort: !Ref ExposedPort
+        ToPort: !Ref ExposedPort
+        GroupId: !Ref SecurityGroupALB
+  
   ECSServiceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -48,7 +60,7 @@ Resources:
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
         - ContainerName: !Ref AWS::StackName
-          ContainerPort: !Ref ExposedPort
+          ContainerPort: 8080
           TargetGroupArn: !Ref TargetGroup
 
   TaskDefinition:
@@ -61,7 +73,7 @@ Resources:
           Essential: true
           Memory: 128
           PortMappings:
-            - ContainerPort: !Ref ExposedPort
+            - ContainerPort: 8080
           Environment:
             - Name: Tag
               Value: !Ref Tag
